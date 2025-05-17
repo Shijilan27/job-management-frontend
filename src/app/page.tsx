@@ -1,103 +1,311 @@
-import Image from "next/image";
+'use client';
+
+import { useState } from 'react';
+import {
+  Stack,
+  TextInput,
+  Group,
+  Button,
+  Select,
+  RangeSlider,
+  Container,
+  Text,
+  Paper,
+  Avatar,
+  Badge,
+  Box,
+  rem,
+  SimpleGrid,
+  Card,
+  Popover,
+} from '@mantine/core';
+import { IconSearch, IconMapPin, IconUserSearch, IconClock, IconCurrencyDollar } from '@tabler/icons-react';
+import { MainLayout } from '@/components/layout/MainLayout';
+
+type JobStatus = 'applied' | 'saved' | 'interviewing' | 'offered' | 'rejected';
+
+interface Job {
+  id: string;
+  title: string;
+  company: string;
+  companyLogo: string;
+  location: string;
+  type: string;
+  experience: string;
+  onsite: string;
+  salary: string;
+  postedDate: string;
+  status: JobStatus;
+}
+
+const SAMPLE_JOBS: Job[] = [
+  {
+    id: '1',
+    title: 'Full Stack Developer',
+    company: 'Amazon',
+    companyLogo: '/amazon-logo.svg',
+    location: 'Onsite',
+    type: 'Full-time',
+    experience: '1-3 yr Exp',
+    onsite: 'Onsite',
+    salary: '12LPA',
+    postedDate: '24h Ago',
+    status: 'saved',
+  },
+  {
+    id: '2',
+    title: 'Node.Js Developer',
+    company: 'Tesla',
+    companyLogo: '/tesla-logo.svg',
+    location: 'Onsite',
+    type: 'Full-time',
+    experience: '1-3 yr Exp',
+    onsite: 'Onsite',
+    salary: '12LPA',
+    postedDate: '24h Ago',
+    status: 'applied',
+  },
+  {
+    id: '3',
+    title: 'UX/UI Designer',
+    company: 'Google',
+    companyLogo: '/google-logo.svg',
+    location: 'Onsite',
+    type: 'Full-time',
+    experience: '1-3 yr Exp',
+    onsite: 'Onsite',
+    salary: '12LPA',
+    postedDate: '24h Ago',
+    status: 'interviewing',
+  },
+];
+
+function JobCard({ job }: { job: Job }) {
+  return (
+    <Card
+      radius="md"
+      p="md"
+      withBorder
+      style={{
+        height: '100%',
+        display: 'flex',
+        flexDirection: 'column',
+        transition: 'transform 200ms ease, box-shadow 200ms ease',
+        '&:hover': {
+          transform: 'translateY(-2px)',
+          boxShadow: 'var(--mantine-shadow-md)',
+        },
+      }}
+    >
+      {/* Header Section */}
+      <Box mb="md">
+        <Group justify="space-between" mb="xs" align="flex-start">
+          <Avatar 
+            src={job.companyLogo} 
+            size={50}
+            radius="xl"
+            styles={{
+              root: {
+                border: '1px solid var(--mantine-color-gray-2)',
+                background: 'white',
+              },
+              image: {
+                objectFit: 'contain',
+                padding: '4px',
+              },
+            }}
+          />
+          <Badge 
+            color="blue" 
+            variant="light" 
+            size="lg"
+            style={{
+              padding: '8px 12px',
+              fontSize: '0.9rem',
+            }}
+          >
+            {job.postedDate}
+          </Badge>
+        </Group>
+        <Text size="xl" fw={600} c="dark.9" mt="xs">
+          {job.title}
+        </Text>
+        <Text size="md" c="gray.6">
+          {job.company}
+        </Text>
+      </Box>
+
+      {/* Job Details Section */}
+      <Box style={{ flex: 1 }}>
+        <Group gap={8}>
+          <Group gap={6}>
+            <IconClock style={{ width: rem(18), height: rem(18), color: 'var(--mantine-color-gray-6)' }} />
+            <Text size="sm" c="gray.7">{job.experience}</Text>
+          </Group>
+          <Text size="sm" c="gray.5">•</Text>
+          <Group gap={6}>
+            <IconMapPin style={{ width: rem(18), height: rem(18), color: 'var(--mantine-color-gray-6)' }} />
+            <Text size="sm" c="gray.7">{job.onsite}</Text>
+          </Group>
+          <Text size="sm" c="gray.5">•</Text>
+          <Group gap={6}>
+            <IconCurrencyDollar style={{ width: rem(18), height: rem(18), color: 'var(--mantine-color-gray-6)' }} />
+            <Text size="sm" c="gray.7">{job.salary}</Text>
+          </Group>
+        </Group>
+
+        <Text size="sm" mt="md" mb="xl" c="gray.7" lineClamp={2}>
+          A user-friendly interface lets you browse stunning photos and videos. Filter destinations based on interests and travel style, and create personalized
+        </Text>
+      </Box>
+
+      {/* Button Section */}
+      <Button 
+        variant="light" 
+        color="blue" 
+        fullWidth
+        size="md"
+        style={{
+          marginTop: 'auto',
+          transition: 'transform 150ms ease, background-color 150ms ease',
+          '&:hover': {
+            transform: 'translateY(-1px)',
+            backgroundColor: 'var(--mantine-color-blue-1)',
+          },
+        }}
+      >
+        Apply Now
+      </Button>
+    </Card>
+  );
+}
 
 export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm/6 text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-[family-name:var(--font-geist-mono)] font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+  const [salaryRange, setSalaryRange] = useState<[number, number]>([50, 180]);
+  const [opened, setOpened] = useState(false);
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
+  return (
+    <MainLayout>
+      <Container size="xl" py="xl">
+        <Stack gap="xl">
+          <Group grow>
+            <TextInput
+              size="md"
+              placeholder="Search By Job Title, Role"
+              leftSection={<IconSearch style={{ width: rem(16), height: rem(16), color: 'var(--mantine-color-gray-6)' }} />}
+              styles={{
+                input: {
+                  '&::placeholder': {
+                    color: 'var(--mantine-color-gray-6)',
+                  },
+                },
+                section: { 
+                  pointerEvents: 'none',
+                },
+              }}
             />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+            <Select
+              size="md"
+              placeholder="Preferred Location"
+              leftSection={<IconMapPin style={{ width: rem(16), height: rem(16), color: 'var(--mantine-color-gray-6)' }} />}
+              data={['Remote', 'New York, NY', 'San Francisco, CA', 'London, UK']}
+              styles={{
+                input: {
+                  '&::placeholder': {
+                    color: 'var(--mantine-color-gray-6)',
+                  },
+                },
+                section: { 
+                  pointerEvents: 'none',
+                },
+              }}
+            />
+            <Select
+              size="md"
+              placeholder="Job type"
+              leftSection={<IconUserSearch style={{ width: rem(16), height: rem(16), color: 'var(--mantine-color-gray-6)' }} />}
+              data={['Full-time', 'Part-time', 'Contract', 'Internship']}
+              styles={{
+                input: {
+                  '&::placeholder': {
+                    color: 'var(--mantine-color-gray-6)',
+                  },
+                },
+                section: { 
+                  pointerEvents: 'none',
+                },
+              }}
+            />
+            <Popover opened={opened} onChange={setOpened} width="target" position="bottom">
+              <Popover.Target>
+                <TextInput
+                  size="md"
+                  readOnly
+                  value={`₹${salaryRange[0]}k - ₹${salaryRange[1]}k`}
+                  placeholder="Salary Range"
+                  leftSection={<IconCurrencyDollar style={{ width: rem(16), height: rem(16), color: 'var(--mantine-color-gray-6)' }} />}
+                  onClick={() => setOpened((o) => !o)}
+                  styles={{
+                    input: {
+                      '&::placeholder': {
+                        color: 'var(--mantine-color-gray-6)',
+                      },
+                      cursor: 'pointer',
+                    },
+                    section: { 
+                      pointerEvents: 'none',
+                    },
+                  }}
+                />
+              </Popover.Target>
+              <Popover.Dropdown>
+                <Box p="md" style={{ width: '100%', minWidth: '250px' }}>
+                  <Text size="sm" fw={500} mb="md">Salary Range</Text>
+                  <RangeSlider
+                    min={0}
+                    max={200}
+                    value={salaryRange}
+                    onChange={setSalaryRange}
+                    size="md"
+                    radius="xl"
+                    color="blue"
+                    marks={[
+                      { value: 0, label: '₹0k' },
+                      { value: 100, label: '₹100k' },
+                      { value: 200, label: '₹200k' },
+                    ]}
+                    styles={{
+                      markLabel: {
+                        color: 'var(--mantine-color-gray-7)',
+                        fontSize: '0.875rem',
+                      },
+                      thumb: {
+                        borderWidth: 2,
+                        height: 24,
+                        width: 24,
+                        backgroundColor: 'white',
+                      },
+                      track: {
+                        height: 8,
+                      },
+                    }}
+                  />
+                </Box>
+              </Popover.Dropdown>
+            </Popover>
+          </Group>
+
+          <SimpleGrid 
+            cols={{ base: 1, sm: 2, md: 3 }} 
+            spacing="xl"
+            verticalSpacing="xl"
           >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
+            {SAMPLE_JOBS.map((job) => (
+              <JobCard key={job.id} job={job} />
+            ))}
+          </SimpleGrid>
+        </Stack>
+      </Container>
+    </MainLayout>
   );
 }
