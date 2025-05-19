@@ -1,4 +1,21 @@
+export type JobStatus = 'draft' | 'published' | 'closed';
 export type JobType = 'Full-time' | 'Part-time' | 'Contract' | 'Internship' | 'Freelance';
+
+export interface Job {
+  id?: string;
+  title: string;
+  company: string;
+  location: string;
+  type: JobType;
+  salaryMin: number;
+  salaryMax: number;
+  applicationDeadline: Date;
+  description: string;
+  status: JobStatus;
+  createdAt?: Date;
+  updatedAt?: Date;
+  publishedAt?: Date;
+}
 
 export interface JobFormData {
   title: string;

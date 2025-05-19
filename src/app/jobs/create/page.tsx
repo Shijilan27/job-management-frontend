@@ -1,7 +1,6 @@
 'use client';
 
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
 import {
   TextInput,
   Select,
@@ -10,28 +9,17 @@ import {
   Button,
   Stack,
   Group,
-  Paper,
-  Container,
-  Title,
-  Grid,
-  Text,
-  Tabs,
-  rem,
   Box,
+  Title,
+  Text,
 } from '@mantine/core';
 import { DateInput } from '@mantine/dates';
 import { useForm } from '@mantine/form';
 import { notifications } from '@mantine/notifications';
-import { IconBriefcase, IconBuilding, IconFileDescription } from '@tabler/icons-react';
-import { MainLayout } from '@/components/layout/MainLayout';
 import type { JobFormData } from '@/types/job';
 
-const HOVER_TRANSITION = 'transform 200ms ease, box-shadow 200ms ease';
-
 export default function CreateJobPage() {
-  const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [activeTab, setActiveTab] = useState<string>('basic');
   
   const form = useForm<JobFormData>({
     initialValues: {
@@ -54,12 +42,7 @@ export default function CreateJobPage() {
         value < values.salaryMin 
           ? 'Maximum salary must be greater than minimum salary' 
           : null,
-      description: (value) => 
-        !value 
-          ? 'Job description is required'
-          : value.length < 50 
-          ? 'Job description must be at least 50 characters long'
-          : null,
+      description: (value) => !value ? 'Job description is required' : null,
     },
   });
 
@@ -89,10 +72,6 @@ export default function CreateJobPage() {
           : 'Your job posting has been published successfully',
         color: 'green',
       });
-
-      if (!isDraft) {
-        router.push('/jobs');
-      }
     } catch (error) {
       notifications.show({
         title: 'Error',
@@ -104,195 +83,188 @@ export default function CreateJobPage() {
     }
   };
 
+  const inputStyles = {
+    input: {
+      height: '45px',
+      border: '1px solid #BCBCBC',
+      borderRadius: '10px',
+      fontSize: '14px',
+      fontFamily: 'var(--font-satoshi)',
+      '&:focus': {
+        borderColor: '#00AAFF',
+      },
+    },
+  };
+
   return (
-    <MainLayout>
-      <Container size="lg" py="xl">
-        <Paper radius="lg" p={0} withBorder>
-          <Box p="xl" bg="var(--mantine-color-blue-0)" style={{ borderTopLeftRadius: 'var(--mantine-radius-lg)', borderTopRightRadius: 'var(--mantine-radius-lg)' }}>
-            <Title order={2}>Create Job Opening</Title>
-            <Text c="dimmed" mt="xs">Fill in the details below to create a new job posting</Text>
+    <Box 
+      style={{
+        position: 'absolute',
+        top: '50%',
+        left: '50%',
+        transform: 'translate(-50%, -50%)',
+        width: '600px',
+        height: '700px',
+        background: '#FFFFFF',
+        borderRadius: '20px',
+        padding: '20px',
+      }}
+    >
+      <Title
+        order={2}
+        style={{
+          textAlign: 'center',
+          marginBottom: '20px',
+          fontFamily: 'var(--font-satoshi)',
+          fontWeight: 700,
+          fontSize: '20px',
+          color: '#222222',
+        }}
+      >
+        Create Job Opening
+      </Title>
+
+      <form onSubmit={form.onSubmit((values) => handleSubmit(values, false))}>
+        <Stack gap="xs">
+          {/* Job Title */}
+          <Box>
+            <Text size="sm" fw={600} mb={4}>Job Title</Text>
+            <TextInput
+              placeholder="Full Stack Developer"
+              styles={inputStyles}
+              {...form.getInputProps('title')}
+            />
           </Box>
-          
-          <form onSubmit={form.onSubmit((values) => handleSubmit(values, false))}>
-            <Tabs value={activeTab} onChange={(value) => setActiveTab(value as string)} px="xl">
-              <Tabs.List>
-                <Tabs.Tab 
-                  value="basic" 
-                  leftSection={<IconBriefcase style={{ width: rem(16), height: rem(16) }} />}
-                >
-                  Basic Information
-                </Tabs.Tab>
-                <Tabs.Tab 
-                  value="company" 
-                  leftSection={<IconBuilding style={{ width: rem(16), height: rem(16) }} />}
-                >
-                  Company Details
-                </Tabs.Tab>
-                <Tabs.Tab 
-                  value="description" 
-                  leftSection={<IconFileDescription style={{ width: rem(16), height: rem(16) }} />}
-                >
-                  Job Description
-                </Tabs.Tab>
-              </Tabs.List>
 
-              <Box p="xl">
-                <Tabs.Panel value="basic">
-                  <Stack gap="md">
-                    <Paper p="md" radius="md" withBorder style={{ 
-                      transition: HOVER_TRANSITION,
-                      '&:hover': {
-                        transform: 'translateY(-2px)',
-                        boxShadow: 'var(--mantine-shadow-md)',
-                      }
-                    }}>
-                      <Text size="sm" fw={500} mb="xs" c="dimmed">Job Details</Text>
-                      <Grid gutter="md">
-                        <Grid.Col span={{ base: 12, md: 6 }}>
-                          <TextInput
-                            label="Job Title"
-                            placeholder="Full Stack Developer"
-                            {...form.getInputProps('title')}
-                          />
-                        </Grid.Col>
-                        <Grid.Col span={{ base: 12, md: 6 }}>
-                          <Select
-                            label="Job Type"
-                            placeholder="Full-time"
-                            data={[
-                              'Full-time',
-                              'Part-time',
-                              'Contract',
-                              'Internship',
-                              'Freelance'
-                            ]}
-                            {...form.getInputProps('type')}
-                          />
-                        </Grid.Col>
-                      </Grid>
-                    </Paper>
-                  </Stack>
-                </Tabs.Panel>
+          {/* Company Name */}
+          <Box>
+            <Text size="sm" fw={600} mb={4}>Company Name</Text>
+            <TextInput
+              placeholder="Amazon, Microsoft, Swiggy"
+              styles={inputStyles}
+              {...form.getInputProps('company')}
+            />
+          </Box>
 
-                <Tabs.Panel value="company">
-                  <Stack gap="md">
-                    <Paper p="md" radius="md" withBorder style={{ 
-                      transition: HOVER_TRANSITION,
-                      '&:hover': {
-                        transform: 'translateY(-2px)',
-                        boxShadow: 'var(--mantine-shadow-md)',
-                      }
-                    }}>
-                      <Text size="sm" fw={500} mb="xs" c="dimmed">Company Information</Text>
-                      <Grid gutter="md">
-                        <Grid.Col span={{ base: 12, md: 6 }}>
-                          <TextInput
-                            label="Company Name"
-                            placeholder="Amazon, Microsoft, Swiggy"
-                            {...form.getInputProps('company')}
-                          />
-                        </Grid.Col>
-                        <Grid.Col span={{ base: 12, md: 6 }}>
-                          <Select
-                            label="Location"
-                            placeholder="Choose Preferred Location"
-                            data={[
-                              'Remote',
-                              'New York, NY',
-                              'San Francisco, CA',
-                              'London, UK',
-                              'Bangalore, India'
-                            ]}
-                            {...form.getInputProps('location')}
-                          />
-                        </Grid.Col>
-                      </Grid>
-                    </Paper>
+          {/* Location */}
+          <Box>
+            <Text size="sm" fw={600} mb={4}>Location</Text>
+            <Select
+              placeholder="Choose Preferred Location"
+              data={[
+                'Remote',
+                'New York, NY',
+                'San Francisco, CA',
+                'London, UK',
+                'Bangalore, India'
+              ]}
+              styles={inputStyles}
+              {...form.getInputProps('location')}
+            />
+          </Box>
 
-                    <Paper p="md" radius="md" withBorder style={{ 
-                      transition: HOVER_TRANSITION,
-                      '&:hover': {
-                        transform: 'translateY(-2px)',
-                        boxShadow: 'var(--mantine-shadow-md)',
-                      }
-                    }}>
-                      <Text size="sm" fw={500} mb="xs" c="dimmed">Compensation</Text>
-                      <Grid gutter="md">
-                        <Grid.Col span={{ base: 12, md: 6 }}>
-                          <Group grow>
-                            <NumberInput
-                              label="Minimum Salary"
-                              placeholder="₹ 7.5"
-                              min={0}
-                              {...form.getInputProps('salaryMin')}
-                            />
-                            <NumberInput
-                              label="Maximum Salary"
-                              placeholder="₹ 12,00,000"
-                              min={0}
-                              {...form.getInputProps('salaryMax')}
-                            />
-                          </Group>
-                        </Grid.Col>
-                        <Grid.Col span={{ base: 12, md: 6 }}>
-                          <DateInput
-                            label="Application Deadline"
-                            placeholder="Select a date"
-                            minDate={new Date()}
-                            {...form.getInputProps('applicationDeadline')}
-                          />
-                        </Grid.Col>
-                      </Grid>
-                    </Paper>
-                  </Stack>
-                </Tabs.Panel>
+          {/* Job Type */}
+          <Box>
+            <Text size="sm" fw={600} mb={4}>Job Type</Text>
+            <Select
+              placeholder="Full-time"
+              data={[
+                'Full-time',
+                'Part-time',
+                'Contract',
+                'Internship',
+                'Freelance'
+              ]}
+              styles={inputStyles}
+              {...form.getInputProps('type')}
+            />
+          </Box>
 
-                <Tabs.Panel value="description">
-                  <Paper p="md" radius="md" withBorder style={{ 
-                    transition: HOVER_TRANSITION,
-                    '&:hover': {
-                      transform: 'translateY(-2px)',
-                      boxShadow: 'var(--mantine-shadow-md)',
-                    }
-                  }}>
-                    <Text size="sm" fw={500} mb="xs" c="dimmed">Job Description</Text>
-                    <Textarea
-                      label="Detailed Description"
-                      placeholder="Please share a description to let the candidate know more about the job role"
-                      minRows={6}
-                      {...form.getInputProps('description')}
-                    />
-                  </Paper>
-                </Tabs.Panel>
-              </Box>
-            </Tabs>
+          {/* Salary Range */}
+          <Box>
+            <Text size="sm" fw={600} mb={4}>Salary Range</Text>
+            <Group grow>
+              <NumberInput
+                placeholder="₹0"
+                min={0}
+                styles={inputStyles}
+                {...form.getInputProps('salaryMin')}
+              />
+              <NumberInput
+                placeholder="₹12,00,000"
+                min={0}
+                styles={inputStyles}
+                {...form.getInputProps('salaryMax')}
+              />
+            </Group>
+          </Box>
 
-            <Box px="xl" pb="xl">
-              <Group justify="flex-end" mt="xl">
-                <Button 
-                  variant="default" 
-                  onClick={() => handleSubmit(form.values, true)}
-                  loading={isSubmitting}
-                >
-                  Save Draft
-                </Button>
-                <Button 
-                  type="submit" 
-                  loading={isSubmitting}
-                  style={{ 
-                    transition: 'transform 150ms ease',
-                    '&:hover': {
-                      transform: 'scale(1.02)',
-                    }
-                  }}
-                >
-                  Publish Job
-                </Button>
-              </Group>
-            </Box>
-          </form>
-        </Paper>
-      </Container>
-    </MainLayout>
+          {/* Application Deadline */}
+          <Box>
+            <Text size="sm" fw={600} mb={4}>Application Deadline</Text>
+            <DateInput
+              placeholder="Select a date"
+              minDate={new Date()}
+              styles={inputStyles}
+              {...form.getInputProps('applicationDeadline')}
+            />
+          </Box>
+
+          {/* Job Description */}
+          <Box>
+            <Text size="sm" fw={600} mb={4}>Job Description</Text>
+            <Textarea
+              placeholder="Please share a description to let the candidate know more about the job role"
+              minRows={3}
+              styles={{
+                ...inputStyles,
+                input: {
+                  ...inputStyles.input,
+                  height: '80px',
+                },
+              }}
+              {...form.getInputProps('description')}
+            />
+          </Box>
+
+          {/* Buttons */}
+          <Group justify="space-between" mt="md">
+            <Button
+              variant="default"
+              onClick={() => handleSubmit(form.values, true)}
+              loading={isSubmitting}
+              style={{
+                height: '40px',
+                background: '#FFFFFF',
+                border: '1.5px solid #222222',
+                boxShadow: '0px 0px 4px rgba(0, 0, 0, 0.25)',
+                borderRadius: '10px',
+                fontFamily: 'var(--font-satoshi)',
+                fontWeight: 600,
+                fontSize: '16px',
+                color: '#222222',
+              }}
+            >
+              Save Draft
+            </Button>
+            <Button
+              type="submit"
+              loading={isSubmitting}
+              style={{
+                height: '40px',
+                background: '#00AAFF',
+                borderRadius: '10px',
+                fontFamily: 'var(--font-satoshi)',
+                fontWeight: 600,
+                fontSize: '16px',
+                color: '#FFFFFF',
+              }}
+            >
+              Publish
+            </Button>
+          </Group>
+        </Stack>
+      </form>
+    </Box>
   );
-}
+} 

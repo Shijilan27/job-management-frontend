@@ -1,4 +1,7 @@
-import { Stack, Title, Table, Badge, Group, Text, ActionIcon } from '@mantine/core';
+'use client';
+
+import { Stack, Title, Badge, Group, Text, ActionIcon } from '@mantine/core';
+import { Table } from '@mantine/core';
 import { IconEye, IconDownload } from '@tabler/icons-react';
 import { MainLayout } from '@/components/layout/MainLayout';
 

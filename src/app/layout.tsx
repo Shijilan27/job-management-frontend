@@ -1,12 +1,13 @@
 import type { Metadata } from "next";
 import { GeistSans, GeistMono } from "geist/font";
-import { ColorSchemeScript, MantineProvider } from '@mantine/core';
-import { NotificationsProvider } from '@/components/providers/NotificationsProvider';
-import { theme } from '@/theme';
-import '@mantine/core/styles.css';
-import '@mantine/notifications/styles.css';
-import '@mantine/dates/styles.css';
-import "./globals.css";
+import { ColorSchemeScript } from '@mantine/core';
+import { ClientProvider } from '@/components/providers/ClientProvider';
+import { Inter } from 'next/font/google';
+
+const inter = Inter({
+  subsets: ['latin'],
+  variable: '--font-inter',
+});
 
 export const metadata: Metadata = {
   title: "Job Management System",
@@ -19,15 +20,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en" suppressHydrationWarning className={inter.variable}>
       <head>
         <ColorSchemeScript />
+        <meta name="viewport" content="minimum-scale=1, initial-scale=1, width=device-width" />
       </head>
       <body className={`${GeistSans.variable} ${GeistMono.variable} antialiased`}>
-        <MantineProvider theme={theme} defaultColorScheme="light">
-          <NotificationsProvider />
-          {children}
-        </MantineProvider>
+        <ClientProvider>{children}</ClientProvider>
       </body>
     </html>
   );

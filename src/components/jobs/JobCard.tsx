@@ -7,27 +7,41 @@ import { IconClock, IconBriefcase, IconMapPin } from '@tabler/icons-react';
 type JobStatus = 'applied' | 'saved' | 'interviewing' | 'offered' | 'rejected';
 
 interface JobCardProps {
-  id: string;
   title: string;
   company: string;
+  companyLogo?: string;
   location: string;
   type: string;
-  postedDate: string;
-  status: JobStatus;
+  salaryMin: number;
+  salaryMax: number;
+  publishedAt: string | null;
 }
 
-export function JobCard({ title, company, location, type, postedDate }: JobCardProps) {
+export function JobCard({ title, company, companyLogo, location, type, salaryMin, salaryMax, publishedAt }: JobCardProps) {
   return (
     <Card withBorder radius="md" p="md">
       <Card.Section p="md">
         <Group justify="space-between" align="flex-start">
           <Group gap="sm">
-            <div className="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center">
+            <div style={{ 
+              width: '48px', 
+              height: '48px', 
+              borderRadius: '50%',
+              overflow: 'hidden',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              background: '#F8F9FA',
+              border: '1px solid var(--mantine-color-gray-2)',
+            }}>
               <Image
-                src="/company-logo-placeholder.png"
+                src={companyLogo || '/company-logos/placeholder.png'}
                 alt={company}
                 width={32}
                 height={32}
+                style={{
+                  objectFit: 'contain',
+                }}
               />
             </div>
             <div>
@@ -51,16 +65,11 @@ export function JobCard({ title, company, location, type, postedDate }: JobCardP
           <Text size="sm">{location}</Text>
         </Group>
         <Group gap="xs" c="dimmed">
-          <IconBriefcase size={16} />
-          <Text size="sm">1-3 yr Exp</Text>
-          <Text size="sm">•</Text>
-          <Text size="sm">Onsite</Text>
-          <Text size="sm">•</Text>
-          <Text size="sm">12LPA</Text>
+          <Text size="sm">₹{salaryMin} - ₹{salaryMax}</Text>
         </Group>
         <Group gap="xs" c="dimmed">
           <IconClock size={16} />
-          <Text size="sm">{postedDate}</Text>
+          <Text size="sm">{publishedAt ? new Date(publishedAt).toLocaleDateString() : ''}</Text>
         </Group>
       </Stack>
 

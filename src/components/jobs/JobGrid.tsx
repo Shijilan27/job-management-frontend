@@ -11,8 +11,15 @@ interface Job {
   company: string;
   location: string;
   type: string;
-  postedDate: string;
-  status: JobStatus;
+  salaryMin: number;
+  salaryMax: number;
+  applicationDeadline: string;
+  description: string;
+  status: 'draft' | 'published' | 'closed';
+  createdAt: string;
+  updatedAt: string;
+  publishedAt: string | null;
+  companyLogo?: string;
 }
 
 interface JobGridProps {
