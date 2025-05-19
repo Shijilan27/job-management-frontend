@@ -1,11 +1,11 @@
 import { Job } from '../types/job';
 
-const API_URL = 'https://job-management-backend.onrender.com/jobs';
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export const jobService = {
   // Create a new job
   async createJob(jobData: Omit<Job, 'id'>): Promise<Job> {
-    const response = await fetch(API_URL, {
+    const response = await fetch(`${API_URL}/jobs`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -20,7 +20,7 @@ export const jobService = {
 
   // Get all jobs
   async getAllJobs(): Promise<Job[]> {
-    const response = await fetch(API_URL);
+    const response = await fetch(`${API_URL}/jobs`);
     if (!response.ok) {
       throw new Error('Failed to fetch jobs');
     }
@@ -29,7 +29,7 @@ export const jobService = {
 
   // Get a single job by ID
   async getJobById(id: string): Promise<Job> {
-    const response = await fetch(`${API_URL}/${id}`);
+    const response = await fetch(`${API_URL}/jobs/${id}`);
     if (!response.ok) {
       throw new Error('Failed to fetch job');
     }
@@ -38,7 +38,7 @@ export const jobService = {
 
   // Update a job
   async updateJob(id: string, jobData: Partial<Job>): Promise<Job> {
-    const response = await fetch(`${API_URL}/${id}`, {
+    const response = await fetch(`${API_URL}/jobs/${id}`, {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
@@ -53,7 +53,7 @@ export const jobService = {
 
   // Delete a job
   async deleteJob(id: string): Promise<void> {
-    const response = await fetch(`${API_URL}/${id}`, {
+    const response = await fetch(`${API_URL}/jobs/${id}`, {
       method: 'DELETE',
     });
     if (!response.ok) {
