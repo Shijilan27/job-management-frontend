@@ -67,7 +67,6 @@ export function Navbar({ onCreateJob }: NavbarProps) {
             {[
               { label: 'Home', href: '/' },
               { label: 'Find Jobs', href: '/jobs' },
-              { label: 'Find Talents', href: '/talents' },
               { label: 'About us', href: '/about' },
               { label: 'Testimonials', href: '/testimonials' },
             ].map((link) => (
