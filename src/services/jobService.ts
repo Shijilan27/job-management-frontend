@@ -2,6 +2,8 @@ import { Job } from '../types/job';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
+console.log('Using API URL:', process.env.NEXT_PUBLIC_API_URL);
+
 export const jobService = {
   // Create a new job
   async createJob(jobData: Omit<Job, 'id'>): Promise<Job> {
